@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { NotFound as NotFoundError } from 'http-errors';
 import { Any, getConnection, getRepository } from 'typeorm';
 import { Contrato, Produto, Cliente, Revenda, Atendente } from '../../database/entities';
+import salvarLogAuditoriaContrato from '../log_auditoria/register-log';
 import validator from './validators/store-contrato';
 //import ICreateContract from './interfaces/store-contrato';
 import IRequester from '../../lib/interfaces/requester';
@@ -133,7 +134,8 @@ export default async function store(
           contrato.id_ifitness_web = createMultInExternalApi.data.id_unidade;
           const newContract = await getConnection().manager.save(contrato, { reload: true });
      
-          //return newContract;
+          // Salva a ação no log
+          salvarLogAuditoriaContrato(contrato,requester,"criado");
    
           return [newContract,createMultInExternalApi];
         
@@ -217,7 +219,8 @@ export default async function store(
           contrato.id_ifitness_web = createMultInExternalApi.data.id_unidade;
           const newContract = await getConnection().manager.save(contrato, { reload: true });
      
-          //return newContract;
+          // Salva a ação no log
+          salvarLogAuditoriaContrato(contrato,requester,"criado");
    
           return [newContract,createMultInExternalApi];
 
@@ -343,6 +346,9 @@ export default async function store(
         saveContract.status = 'ativo';
         contrato.id_ifitness_web = createInExternalApi.cod_contrato;
         const newContract = await getConnection().manager.save(contrato, { reload: true });
+        
+        // Salva a ação no log
+        salvarLogAuditoriaContrato(contrato,requester,"criado");
    
         return newContract;
       
@@ -460,13 +466,17 @@ export default async function store(
             
           };
          
-          saveContract.status = 'ativo';
-          contrato.id_ifitness_web = createMultInExternalApi.data.id_unidade;
-          const newContract = await getConnection().manager.save(contrato, { reload: true });
-     
-          return newContract;
+        saveContract.status = 'ativo';
+        contrato.id_ifitness_web = createMultInExternalApi.data.id_unidade;
+        const newContract = await getConnection().manager.save(contrato, { reload: true });
+          
+        // Salva a ação no log
+        salvarLogAuditoriaContrato(contrato,requester,"criado");
+          
+        return newContract;
  
-        //return saveContract;
+        
+        
       
 
       }else {
@@ -551,6 +561,8 @@ export default async function store(
           saveContract.status = 'ativo';
           contrato.id_ifitness_web = createMultInExternalApi.data.id_unidade;
           const newContract = await getConnection().manager.save(contrato, { reload: true });
+          // Salva a ação no log
+          salvarLogAuditoriaContrato(contrato,requester,"criado");
      
           return newContract;
 
@@ -680,6 +692,8 @@ export default async function store(
       saveContract.status = 'ativo';
       contrato.id_ifitness_web = createInExternalApi.cod_contrato;
       const newContract = await getConnection().manager.save(contrato, { reload: true });
+      // Salva a ação no log
+      salvarLogAuditoriaContrato(contrato,requester,"criado");
       
 
       return newContract;

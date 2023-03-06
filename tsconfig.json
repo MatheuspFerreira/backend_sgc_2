@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": [
       "es5",
-      "es6",
+      "es6"
     ],
     "allowSyntheticDefaultImports": true,
     "target": "es5",

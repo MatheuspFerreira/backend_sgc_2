@@ -2,6 +2,7 @@ import { Contrato } from '../../database/entities';
 import IRequester from '../../lib/interfaces/requester';
 import { getRepository } from 'typeorm';
 import reactivate from '../../lib/api/reactivate-contrato';
+import salvarLogAuditoriaContrato from '../log_auditoria/register-log';
 
 export default async function reactivateUnit(prefix: string, id: string, requester: IRequester) {
  
@@ -37,5 +38,10 @@ export default async function reactivateUnit(prefix: string, id: string, request
     }; 
 
   };
+
+  // Salva a ação no log
+  salvarLogAuditoriaContrato(contrato,requester,"reativado");
+
+  
 
 };

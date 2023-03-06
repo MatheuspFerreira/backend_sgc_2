@@ -1,6 +1,7 @@
 import { Contrato } from '../../database/entities';
 import IRequester from '../../lib/interfaces/requester';
 import { getRepository } from 'typeorm';
+import salvarLogAuditoriaContrato from '../log_auditoria/register-log';
 
 export default async function cancelUnit(prefix: string, id: string, requester: IRequester) {
 
@@ -15,4 +16,7 @@ export default async function cancelUnit(prefix: string, id: string, requester: 
   // Realiza a inativação da contrato.
   contrato.status = 'cancelado';
   await contratoRepository.save(contrato);
+
+  // Salva a ação no log
+  salvarLogAuditoriaContrato(contrato,requester,"cancelado");
 }

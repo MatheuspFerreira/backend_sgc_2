@@ -31,6 +31,9 @@ export default class Contrato {
   @Column({ name: 'admin_email' })
   adminEmail: String;
 
+  @Column()
+  codcliente: number;
+
   // Referências para o banco suporte
   @Column('integer')
   codrevenda: number;
