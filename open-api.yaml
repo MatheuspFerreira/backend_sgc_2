@@ -1,0 +1,576 @@
+openapi: 3.0.1
+info:
+  title: Express.js/TypeORM/REST
+  description: |
+    Esse é documento de referência da API, com a descrição dos endpoints, parâmetros e respostas esperadas.
+  version: 0.1.0
+servers:
+  - url: http://18.191.71.115:8000/
+tags:
+  - name: publico
+    description: Operações não autenticadas
+  - name: contrato
+    description: Operações relativas a contratos
+  - name: cliente
+    description: Operações relativas aos clientes
+  - name: produto
+    description: Operações relativas aos produtos
+  - name: usuario
+    description: Operações relativas a usuários (revenda, técnico revenda e atendente)
+
+paths:
+  /login:
+    post:
+      tags:
+        - publico
+      summary: Autenticar usuário
+      operationId: loginPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: "avaliacao@inspell.com.br"
+                password:
+                  type: string
+                  example: "123456Ab"
+      responses:
+        201:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+  
+  /verify-token:
+    post:
+      tags:
+        - publico
+      summary: Verificar token de um usuário previamente logado
+      operationId: verifyTokenPost
+      responses:
+        204:
+          $ref: "#/components/responses/204NoContent"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+  
+  /contratos:
+    post:
+      tags:
+        - contrato
+      summary: Criar um contrato
+      operationId: contratoPost
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContratoRequest"
+      responses:
+        201:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratoResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+        404:
+          $ref: "#/components/responses/404NotFound"
+    get:
+      tags:
+        - contrato
+      summary: Listar contratos
+      operationId: contratoGetMany
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/LimitPerPage"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContratoResponse"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+  
+  /contratos/{contratoId}:
+    get:
+      tags:
+        - contrato
+      summary: Obter contrato
+      operationId: contratoGet
+      parameters:
+        - $ref: "#/components/parameters/ContratoId"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratoResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+        404:
+          $ref: "#/components/responses/404NotFound"
+    delete:
+      tags:
+        - contrato
+      summary: Deletar contrato
+      operationId: contratoDelete
+      parameters:
+        - $ref: "#/components/parameters/ContratoId"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        204:
+          $ref: "#/components/responses/204NoContent"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+        404:
+          $ref: "#/components/responses/404NotFound"
+  
+  /produtos:
+    get:
+      tags:
+        - produto
+      summary: Listar produtos
+      operationId: produtoGetMany
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/LimitPerPage"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoResponse"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+    
+  /clientes/{clienteId}:
+    get:
+      tags:
+        - cliente
+      summary: Obter cliente
+      operationId: clienteGet
+      parameters:
+        - $ref: "#/components/parameters/ClienteId"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+        404:
+          $ref: "#/components/responses/404NotFound"
+    put:
+      tags:
+        - cliente
+      summary: Atualizar cliente
+      operationId: clientePut
+      parameters:
+        - $ref: "#/components/parameters/ClienteId"
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteRequest"
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+        404:
+          $ref: "#/components/responses/404NotFound"
+  
+  /clientes:
+    post:
+      tags:
+        - cliente
+      summary: Criar um cliente
+      operationId: clientePost
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteRequest"
+      responses:
+        201:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteResponse"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+    get:
+      tags:
+        - contrato
+      summary: Listar clientes
+      operationId: clienteGetMany
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/LimitPerPage"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClienteResponse"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+  
+  /usuarios/notificacoes:
+    get:
+      tags:
+        - notificacao
+      summary: Listar notificacoes
+      operationId: notificacaoGetMany
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/LimitPerPage"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Sucesso na requisição
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NotificacaoResponse"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+  
+          
+components:
+  responses:
+    204NoContent:
+      description: A resposta foi processada com sucesso e nada foi retornado do servidor.
+    400BadRequest:
+      description: Erro do tipo "REQUISIÇÃO COM MÁ FORMAÇÃO" (Bad Request).
+    401Unauthorized:
+      description: Erro do tipo "NÃO AUTENTICADO" (Unauthorized).
+    403Forbidden:
+      description: Erro do tipo "NÃO AUTORIZADO" (Forbidden).
+    404NotFound:
+      description: Erro do tipo "NÃO ENCONTRADO" (Not Found).
+    422Unprocessable:
+      description: Erro do tipo "ENTIDADE NÃO PROCESSÁVEL" (Unprocessable Entity). 
+  
+  schemas:
+    ClienteRequest:
+      type: object
+      properties:
+        codcliente:
+          type: integer
+          description: Código do Cliente
+          example: 40
+        razaosocial:
+          type: string
+        fantasia:
+          type: string
+        cnpj:
+          type: string
+        endereco:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+        cep:
+          type: string
+        tel1:
+          type: string
+        tel2:
+          type: string
+        fax:
+          type: string
+        email:
+          type: string
+        inscricaoestadual:
+          type: string
+        inscricaomunicipal:
+          type: string
+        observacao:
+          type: string
+        naoRecebeAtestado:
+          type: string
+        id:
+          type: number
+        logSiac: 
+          type: string
+        contratos: 
+          type: array
+          items:
+             $ref: "#/components/schemas/ContratoResponse"
+      required:
+        - razaosocial
+        - fantasia
+        - cnpj
+        - endereco
+        - bairro
+        - cidade
+        - uf
+
+    ContratoRequest:
+      type: object
+      properties:
+        dataInicio: 
+          type: string
+          format: date
+          description: Data de início do contrato
+          example: '2021-10-10'
+        sufixo:
+          type: string
+          description: Sufixo do banco de dados do cliente
+        clientes:
+          type: array
+          description: Lista de codigos de clientes que estarão vinculados
+          items:
+            type: integer
+        codrevenda:
+          type: integer
+          description: código da revenda
+          example: 100
+        codproduto:
+          type: integer
+          description: código do produto
+          example: 15
+      required:
+        - dataInicio
+        - codproduto
+        - codrevenda
+        - clientes
+    
+    ClienteResponse:
+      type: object
+      properties:
+        codcliente:
+          type: integer
+          description: Código do Cliente
+          example: 40
+        razaosocial:
+          type: string
+        fantasia:
+          type: string
+        cnpj:
+          type: string
+        endereco:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+        cep:
+          type: string
+        tel1:
+          type: string
+        tel2:
+          type: string
+        fax:
+          type: string
+        email:
+          type: string
+        inscricaoestadual:
+          type: string
+        inscricaomunicipal:
+          type: string
+        observacao:
+          type: string
+        naoRecebeAtestado:
+          type: string
+        id:
+          type: number
+        logSiac: 
+          type: string
+        contratos: 
+          type: array
+          items:
+             $ref: "#/components/schemas/ContratoResponse"
+
+    ContratoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do contrato
+          example: 27
+        dataInicio: 
+          type: string
+          format: date
+          description: Data de início do contrato
+          example: '2021-10-10'
+        sufixo:
+          type: string
+          description: Sufixo do banco de dados do cliente
+        clientes:
+          type: array
+          description: Lista de codigos de clientes que estarão vinculados
+          items:
+            type: integer
+        codrevenda:
+          type: integer
+          description: código da revenda
+          example: 100
+        codproduto:
+          type: integer
+          description: código do produto
+          example: 15
+        createdAt: 
+          type: string
+          format: date
+          description: Data de início do contrato
+          example: '2021-10-10'
+      required:
+        - id
+        - dataInicio
+        - codproduto
+        - codrevenda
+        - clientes
+        - createdAt
+    
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: codrevenda (revenda ou técnico revenda) ou registro (atendente)
+              example: 100
+            codtecnico:
+              type: integer
+              description: codtecnico (caso usuário seja técnico revenda)
+              example: 2
+            name:
+              type: string
+              description: Nome do usuário
+              example: INSPELL TECNOLOGIA E SERVICOS LTDA
+          required:
+            - id
+            - name
+    
+    NotificacaoResponse:
+      type: object
+      properties:
+        id: 
+          type: number
+        titulo:
+          type: string
+        mensagem:
+          type: string
+        categoria:
+          type: string
+          enum: [info, atencao, urgente, sucesso]
+        usuarioId:
+          type: integer
+          description: codrevenda ou registro (atendente)
+        usuarioCodTecnico:
+          type: integer
+          description: codtecnico (se houver)
+        lidaEm:
+          type: string
+          format: date-time
+
+    ProdutoResponse:
+      type: object
+      properties:
+        codproduto:
+          type: integer
+          description: Código do Produto
+          example: 2
+        produto:
+          type: string
+          description: Nome do produto
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Número da página desejada
+      schema:
+        type: integer
+        example: 2
+    
+    LimitPerPage:
+      name: limitPerPage
+      in: query
+      required: false
+      description: Número de items por página
+      schema:
+        type: integer
+        example: 25
+    
+    ContratoId:
+      name: contratoId
+      in: path
+      required: true
+      description: ID do contrato
+      schema:
+        type: integer
+        example: 1094
+    
+    ClienteId:
+      name: clienteId
+      in: path
+      required: true
+      description: codcliente
+      schema:
+        type: integer
+        example: 275
