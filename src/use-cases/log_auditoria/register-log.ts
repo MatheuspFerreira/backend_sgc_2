@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { LogAuditoriaContrato } from '../../database/entities/log-auditoria.entity';
+import  LogAuditoriaContrato  from '../../database/entities/log-auditoria.entity';
 import IRequester from '../../lib/interfaces/requester';
 
 export interface LogAuditoriaAcao {
@@ -7,6 +7,8 @@ export interface LogAuditoriaAcao {
   suspenso: 'suspenso';
   cancelado: 'cancelado';
   reativado: 'reativado';
+  alterado: 'alterado';
+  aguardando_cancelamento: 'aguardando cancelamento'
 }
 
 export default async function salvarLogAuditoriaContrato(
@@ -33,5 +35,7 @@ export default async function salvarLogAuditoriaContrato(
   novoLog.acao = acao;
   novoLog.comentario = comentario;
   novoLog.createdAt = new Date();
+
   await logAuditoriaContratoRepository.save(novoLog);
+  
 }

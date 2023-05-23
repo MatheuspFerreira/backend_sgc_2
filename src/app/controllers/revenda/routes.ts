@@ -5,6 +5,8 @@ const router = Router();
 
 
 router.get('/', RevendaController.list);
+router.get('/active', RevendaController.listActive);
+router.post('/autocomplete', RevendaController.autoComplete);
 
 
 

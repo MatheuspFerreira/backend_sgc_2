@@ -9,7 +9,7 @@ export class CreateLogAuditoriaContrato1637205876139 implements MigrationInterfa
             cdg_tecrevenda INTEGER NOT NULL,
             atendente_inspell INTEGER NOT NULL,
             cdg_cliente INTEGER NOT NULL,
-            acao ENUM('criado', 'suspenso', 'cancelado', 'reativado') NOT NULL,
+            acao ENUM('criado', 'suspenso', 'cancelado', 'reativado', aguardando cancelamento) NOT NULL,
             comentario VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL
         )`);

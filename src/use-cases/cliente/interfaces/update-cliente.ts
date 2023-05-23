@@ -21,5 +21,6 @@ interface ICliente {
 
 export default interface IUpdateContract {
   codcliente: number;
+  codcontrato:number;
   data: ICliente;
 }

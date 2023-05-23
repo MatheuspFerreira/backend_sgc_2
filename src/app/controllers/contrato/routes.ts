@@ -5,6 +5,8 @@ const router = Router();
 
 // Contratos
 router.get('/', ContratoController.list);
+router.get('/count', ContratoController.countContracts);
+router.get('/countyear', ContratoController.countContractsYear);
 router.get('/:id', ContratoController.obtain);
 router.delete('/:id', ContratoController.destroy);
 router.post('/', ContratoController.store);
@@ -14,6 +16,7 @@ router.post('/atendente/find', ContratoController.filter);
 router.put('/deactivate/:prefix/:id', ContratoController.deactivate);
 router.put('/reactivate/:prefix/:id', ContratoController.reactivate);
 router.put('/cancel/:prefix/:id', ContratoController.cancel);
+router.post('/update', ContratoController.update);
 
 
 export default router;

@@ -6,8 +6,9 @@ import {
   useCodigoRevenda,
 } from '../../lib/authorizations';
 import validator from './validators/obtain-contrato';
+import IRequester from '../../lib/interfaces/requester';
 
-export default async function destroy(id: number, requester: any) {
+export default async function destroy(id: number, requester: IRequester) {
   await validator({
     id,
   });

@@ -18,14 +18,11 @@ export default async function listContract({
     page,
   });
 
-   // Se for Atendente Inspell, consegue acessar todos os contratos cadastrados no banco de dados.
+  
+
+  // Se for Atendente Inspell, consegue acessar todos os contratos cadastrados no banco de dados.
   if(requester.p.toString() === '**'){
-    //console.log('Listando contratos')
-
-    
-
-    const codrevenda = useCodigoRevenda(requester);
-
+  
     const query: FindManyOptions = {
       skip: Number(page) * Number(limitPerPage),
       take: Number(limitPerPage),
@@ -33,8 +30,6 @@ export default async function listContract({
       relations: ['cliente'],
     };
 
-    
-    
     return {
       contratos: await getRepository(Contrato).findAndCount(query),
       permission: requester.p
@@ -58,11 +53,12 @@ export default async function listContract({
 
   if (codrevenda) {
     query.where = { codrevenda };
-  }
+  };
 
   if (codcliente) {
     query.where = { cliente: { codcliente: Number(codcliente) } };
-  }
+  };
 
-  return getRepository(Contrato).findAndCount(query);
+
+  return await getRepository(Contrato).findAndCount(query);
 }

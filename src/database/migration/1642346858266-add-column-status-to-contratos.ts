@@ -8,7 +8,7 @@ export class addColumnStatusToContratos1642346858266
       new TableColumn({
         name: 'status',
         type: 'enum',
-        enum: ['ativo', 'suspenso', 'cancelado'],
+        enum: ['ativo', 'suspenso', 'cancelado', 'aguardando cancelamento'],
         default: `'ativo'`,
       }),
     ]);

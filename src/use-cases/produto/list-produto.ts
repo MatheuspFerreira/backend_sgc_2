@@ -19,6 +19,6 @@ export default async function listProdutos({
       produto: 'ASC',
     },
     // @todo
-    where: `produto = BINARY 'iFitness'`,
+    where: `exibir_sgc = BINARY 'S'`,
   });
 }

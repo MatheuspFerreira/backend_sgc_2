@@ -14,6 +14,9 @@ export default class Revenda {
   @Column('text')
   razaosocial: string;
 
+  @Column('text')
+  fantasia: string;
+
   @Column({ type: 'text', name: 'ativa' })
   ativa: string;
 

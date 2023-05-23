@@ -5,6 +5,7 @@ import Produto from './produto.entity';
 import Cliente from './cliente.entity';
 import Notificacao from './notificacao.entity';
 import Contrato from './contrato.entity';
+import  LogAuditoriaContrato  from './log-auditoria.entity';
 
 export {
   Atendente,
@@ -14,4 +15,6 @@ export {
   Cliente,
   Notificacao,
   Contrato,
+  LogAuditoriaContrato 
+  
 };

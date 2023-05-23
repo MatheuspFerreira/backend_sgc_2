@@ -1,12 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import Revenda from './revenda.entity';
-import TecnicoRevenda from './tecnico-revenda.entity';
-import Atendente from './atendente.entity';
 import Cliente from './cliente.entity';
-import Contrato from './contrato.entity';
 
 @Entity()
-export class LogAuditoriaContrato {
+export default class LogAuditoriaContrato {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,7 +25,7 @@ export class LogAuditoriaContrato {
   @Column({
     name: 'acao',
     type: 'enum',
-    enum: ['criado', 'suspenso','cancelado','reativado'],
+    enum: ['criado', 'suspenso','cancelado','reativado', 'aguardando cancelamento', 'alterado'],
    
   })
   acao: String;
@@ -39,5 +35,13 @@ export class LogAuditoriaContrato {
 
   @Column({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
+
+  @ManyToOne(() => Cliente, (cliente) => cliente.logs)
+  @JoinColumn({ name: 'cdg_cliente', referencedColumnName: 'codcliente' })
+  cliente: Cliente;
+
+
   
 }
+
+  

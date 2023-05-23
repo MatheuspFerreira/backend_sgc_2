@@ -4,6 +4,7 @@ import listClientes from '../../../use-cases/cliente/list-cliente';
 import updateCliente from '../../../use-cases/cliente/update-cliente';
 import storeCliente from '../../../use-cases/cliente/store-cliente';
 import obtainCliente from '../../../use-cases/cliente/obtain-cliente';
+import AutoCompleteCliente from '../../../use-cases/cliente/auto-complete-cliente';
 
 export default {
   async list({ params, user: requester }: RequestCustom, res: Response) {
@@ -37,6 +38,7 @@ export default {
       {
         codcliente: parseInt(params.codcliente, 10) as unknown as number,
         data: body,
+        codcontrato:body.codcontrato
       },
       requester
     );
@@ -53,5 +55,10 @@ export default {
     );
     
     return res.status(200).json(cliente);
+  },
+
+  async autoComplete({ body, user: requester }: RequestCustom, res: Response) {
+    const clienteFiltred = await AutoCompleteCliente(body, requester);  
+    return res.status(200).json(clienteFiltred); 
   },
 };

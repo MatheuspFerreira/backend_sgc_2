@@ -10,6 +10,10 @@ import filterAtendente from '../../../use-cases/contrato/filter-contrato';
 import deactivateUnit from '../../../use-cases/contrato/deactivate-contrato';
 import reactivateUnit from '../../../use-cases/contrato/reactivate-contrato';
 import cancelUnit from '../../../use-cases/contrato/cancel-contrato';
+import ContractsCount from '../../../use-cases/contrato/count-contracts';
+import updateContrato from '../../../use-cases/contrato/update-contrato';
+import contractsCountYear from '../../../use-cases/contrato/count-contractsYearResult';
+
 
 export default {
   async list({ query, user: requester }: RequestCustom, res: Response) {
@@ -36,7 +40,6 @@ export default {
   },
 
   async canStore({ body, user: requester }: RequestCustom, res: Response) {
-    //console.log(body)
     const cliente = await canStoreContract({
       cnpj: body.cnpj.replace(/[^\w\s]/g, ''),
       tipoDoc: body.tipoDoc,
@@ -63,9 +66,7 @@ export default {
     if(contract.error){
       return res.status(400).send(contract); 
     };    
-
-    return res.status(201).json(contract);
-    
+    return res.status(201).json(contract); 
   },
 
   async checkSufixo({ body }: RequestCustom, res: Response) {
@@ -80,9 +81,10 @@ export default {
     return res.status(201).json(contract); 
   },
 
-  async deactivate({ params, user: requester }: RequestCustom, res: Response) {
+  async deactivate({ body, params, user: requester }: RequestCustom, res: Response) {
     const { prefix, id } = params;
-    await  deactivateUnit (prefix, id, requester);
+    const { comentario } = body
+    await  deactivateUnit (prefix, id, requester, comentario);
     return res.status(204).send();
   },
 
@@ -92,10 +94,29 @@ export default {
     return res.status(204).send();
   },
 
-  async cancel({ params, user: requester }: RequestCustom, res: Response) {
+  async cancel({ body, params, user: requester }: RequestCustom, res: Response) {
     const { prefix, id } = params;
-     await cancelUnit(prefix, id, requester);
+    const { comentario } = body;
+     await cancelUnit(prefix, id, requester, comentario);
      return res.status(204).send();
-   },
+  },
+
+  async countContracts({ user: requester }: RequestCustom, res: Response) {
+    const contratos = await ContractsCount(requester)
+    
+    return res.status(200).send(contratos);
+  },
+
+  async countContractsYear({ user: requester }: RequestCustom, res: Response) {
+    const contratos = await contractsCountYear(requester)
+    
+    return res.status(200).send(contratos);
+  },
+
+  async update({ body, user: requester }: RequestCustom, res: Response) {
+    const contratos = await updateContrato(body,requester);
+    
+    return res.status(204).send();
+  },
 
 };

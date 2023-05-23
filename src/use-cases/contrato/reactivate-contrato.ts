@@ -3,8 +3,12 @@ import IRequester from '../../lib/interfaces/requester';
 import { getRepository } from 'typeorm';
 import reactivate from '../../lib/api/reactivate-contrato';
 import salvarLogAuditoriaContrato from '../log_auditoria/register-log';
+import podeSuspenderClientes from '../../lib/authorizations/pode-suspender-clientes';
 
 export default async function reactivateUnit(prefix: string, id: string, requester: IRequester) {
+
+  // Verifica se o Técnico da revenda tem permissão
+  podeSuspenderClientes(requester);
  
   // Consulta a unidade no banco de dados.
   const contratoRepository = getRepository(Contrato);
@@ -12,7 +16,13 @@ export default async function reactivateUnit(prefix: string, id: string, request
 
   if (!contrato) {
     throw new Error('contrato não encontrado.');
-  }
+  };
+
+  // Contrato cancelado ou Aguardando cancelamento só podem ser reativados pelos Atendentes da Inspell
+  if((contrato.status === 'cancelado' || contrato.status === 'aguardando cancelamento') && requester.p[0] !== '**'){
+    throw new Error('Você não tem permissão para realizar essa ação, entre em contato com nossa equipe comercial!')
+
+  };
 
   // Realiza a ativação da contrato.
   contrato.status = 'ativo';
@@ -41,7 +51,5 @@ export default async function reactivateUnit(prefix: string, id: string, request
 
   // Salva a ação no log
   salvarLogAuditoriaContrato(contrato,requester,"reativado");
-
-  
 
 };

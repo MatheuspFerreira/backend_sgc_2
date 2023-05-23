@@ -1,14 +1,16 @@
 import { getRepository } from 'typeorm';
 import { UnprocessableEntity as UnprocessableEntityError } from 'http-errors';
 import IUpdateCliente from './interfaces/update-cliente';
-import { Cliente } from '../../database/entities';
+import { Cliente, Contrato } from '../../database/entities';
 import validator from './validators/update-cliente';
 import { podeConsultarClientes } from '../../lib/authorizations';
+import IRequester from '../../lib/interfaces/requester';
 
 export default async function updateCliente(
-  { codcliente, data }: IUpdateCliente,
-  requester: any
+  { codcliente, codcontrato, data }: IUpdateCliente,
+  requester: IRequester
 ) {
+
   const clienteData = await validator({
     codcliente,
     ...data,
@@ -16,16 +18,33 @@ export default async function updateCliente(
 
   await podeConsultarClientes(requester);
 
+
+  // Verifica se o status do contrato que solicitou a mudança do cadastro do cliente está ativo.
+  const contrato = await getRepository(Contrato).find({
+    where:{
+      id:codcontrato
+    }
+  });
+
+
+  if(contrato[0].status !== 'ativo'){
+    throw new Error(`
+      Você não tem permissão para realizar essa ação, para mais detalhes entre em contato com nossa equipe comercial.
+    `)
+
+  };
+
+
   const [oldEntity, newEntity] = await Promise.all([
     getRepository(Cliente).findOne({
       where: {
-        codcliente,
+        codcliente
       },
     }),
     getRepository(Cliente).findOne({
-      where: {
-        cnpj: clienteData.cnpj,
-      },
+        where: {
+          cnpj: clienteData.cnpj,
+        },
     }),
   ]);
 

@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
 import Contrato from './contrato.entity';
+import   LogAuditoriaContrato   from './log-auditoria.entity';
 
 @Entity('cliente')
 export default class Cliente {
@@ -62,4 +63,11 @@ export default class Cliente {
 
   @OneToMany(() => Contrato, (contrato) => contrato.cliente)
   contratos: Contrato[];
+
+  @OneToMany(() => LogAuditoriaContrato, (log) => log.cliente)
+  @JoinColumn({ name: 'codcliente', referencedColumnName: 'cdg_cliente' })
+  logs: LogAuditoriaContrato[];
+
+
+  
 }

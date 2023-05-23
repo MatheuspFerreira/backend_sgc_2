@@ -29,6 +29,7 @@ function checkUserType(revenda: any, tecnicoRevenda: any, atendente: any) {
         inativo: tecnicoRevenda.inativo,
         podeConsultarMeusClientes: tecnicoRevenda.podeConsultarMeusClientes,
         podeLicenciarClientes: tecnicoRevenda.podeLicenciarClientes,
+        podeSuspenderClientes: tecnicoRevenda.podeSuspenderClientes,
       },
       type: 'tecnicoRevenda',
     };
@@ -63,6 +64,10 @@ function getPermissions(user: any, type: string) {
     permissions.push('podeLicenciarClientes');
   }
 
+  if (user.podeSuspenderClientes === 'S') {
+    permissions.push('podeSuspenderCliente');
+  }
+
   return permissions;
 }
 
@@ -86,14 +91,14 @@ export default async function createLogin(credentials: ICreateLogin) {
 
   if (!revenda && !tecnicoRevenda && !atendente) {
     throw new UnauthorizedError('Não autorizado');
-  }
+  };
 
   // Um e-mail/senha só está em uma das três tabelas conforme regra de negócio
   const { user, type } = checkUserType(revenda, tecnicoRevenda, atendente);
 
   if (checkEstaInativo(user, type)) {
     throw new ForbiddenError('Usuário inativo');
-  }
+  };
 
   const userObj = {
     name: user.name,

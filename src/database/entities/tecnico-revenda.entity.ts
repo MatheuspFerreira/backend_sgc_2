@@ -26,6 +26,9 @@ export default class TecnicoRevenda {
   @Column({ type: 'text', name: 'Consultar_Meus_Clientes' })
   podeConsultarMeusClientes: string;
 
+  @Column({ type: 'text', name: 'suspensao' })
+  podeSuspenderClientes: string;
+
   @Column({ type: 'text', name: 'inativo' })
   inativo: string;
 }

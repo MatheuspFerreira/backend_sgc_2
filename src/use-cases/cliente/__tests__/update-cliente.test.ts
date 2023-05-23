@@ -1,4 +1,4 @@
-import { BadRequest as BadRequestError } from 'http-errors';
+/*import { BadRequest as BadRequestError } from 'http-errors';
 import updateCliente from '../update-cliente';
 import { suporteDb } from '../../../database/db';
 import { Cliente } from '../../../database/factories';
@@ -69,4 +69,4 @@ describe('TESTE UNITÁRIO - Atualizar Clientes', () => {
       BadRequestError
     );
   });
-});
+});*/

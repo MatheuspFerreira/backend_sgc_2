@@ -12,5 +12,6 @@ router.get('/clientes/:doc', ClienteController.list);
 router.get('/clientes/obtain/:codcliente', ClienteController.obtain);
 router.put('/clientes/:codcliente', ClienteController.update);
 router.post('/clientes', ClienteController.store);
+router.post('/clientes/autocomplete', ClienteController.autoComplete);
 
 export default router;
